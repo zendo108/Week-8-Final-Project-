@@ -43,14 +43,18 @@ public class GuiDemo extends JFrame{
 		
 		drawPanel = new DrawPanel();
 		drawPanel.getTextItem().setText(
-				"Big bugs have little bugs\n" +
-				"      Upon their backs to bite 'em,\n" +
-				"And little bugs have littler bugs,\n" +
-				"      And so it goes, ad infinitum."
+				"Man looks in the abyss, there's nothing\n "
+				+ "staring back at him.\n "
+						+ "At that moment, man finds\n "
+						+ "his character.\n "
+						+ "And that is what keeps\n "
+						+ "him out of the abyss.\n" + 
+						"- hal holbrook"
 			);
 		drawPanel.getTextItem().setFontSize(36);
+		drawPanel.getTextItem().setColor(Color.GREEN);
 		drawPanel.getTextItem().setJustify(TextItem.LEFT);
-		drawPanel.setBackgroundImage(Util.getImageResource("resources/images/mandelbrot.jpeg"));
+		drawPanel.setBackgroundImage(Util.getImageResource("resources/images/nyc.jpeg"));
 		content.add(drawPanel, BorderLayout.CENTER);
 		
 		// Add an icon toolbar to the SOUTH position of the layout
@@ -109,22 +113,23 @@ public class GuiDemo extends JFrame{
 	
 	//create tool bar Ivan
 	private JToolBar makeBackgroundToolBar() {
-		JToolBar tbar = new JToolBar("Background");
-		JButton newPict = tbar.add(newPictureAction);
+		JToolBar bgtbar = new JToolBar("Background");
+		JButton newPict = bgtbar.add(newPictureAction);
 		newPict.setToolTipText("Clear Image, return to default");
-		JButton saveImg = tbar.add(saveImageAction);
+		JButton saveImg = bgtbar.add(saveImageAction);
 		saveImg.setToolTipText("Save Image");
-		tbar.addSeparator(new Dimension(15,0));
-		tbar.add(new ChooseBackgroundAction("Mandelbrot"));
-		tbar.add(new ChooseBackgroundAction("Earthrise"));
-		tbar.add(new ChooseBackgroundAction("Sunset"));
-		tbar.add(new ChooseBackgroundAction("Cloud"));
-		tbar.add(new ChooseBackgroundAction("Eagle_nebula"));
-		tbar.addSeparator(new Dimension(15,0));
-		tbar.add(new ChooseBackgroundAction("Custom..."));
-		tbar.add(new ChooseBackgroundAction("Color..."));
+		bgtbar.addSeparator(new Dimension(10,0));
+		bgtbar.add(new ChooseBackgroundAction("NYC"));
+		bgtbar.add(new ChooseBackgroundAction("Mandelbrot"));
+		bgtbar.add(new ChooseBackgroundAction("Earthrise"));
+		bgtbar.add(new ChooseBackgroundAction("Sunset"));
+		bgtbar.add(new ChooseBackgroundAction("Cloud"));
+		bgtbar.add(new ChooseBackgroundAction("Eagle_nebula"));
+		bgtbar.addSeparator(new Dimension(10,0));
+		bgtbar.add(new ChooseBackgroundAction("Custom..."));
+		bgtbar.add(new ChooseBackgroundAction("Color..."));
 		
-		return tbar;
+		return bgtbar;
 	}
 	
 	/**
@@ -133,6 +138,7 @@ public class GuiDemo extends JFrame{
 	 */
 	private JMenu makeBackgroundMenu() {
 		JMenu menu = new JMenu("Background");
+		menu.add(new ChooseBackgroundAction("NYC"));
 		menu.add(new ChooseBackgroundAction("Mandelbrot"));
 		menu.add(new ChooseBackgroundAction("Earthrise"));
 		menu.add(new ChooseBackgroundAction("Sunset"));

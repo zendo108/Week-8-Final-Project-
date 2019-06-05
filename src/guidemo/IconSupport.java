@@ -37,7 +37,7 @@ public class IconSupport {
 	
 	/**
 	 * Return the stamper menu, with images to add Ivan .
-	 * @return JMenu to be added
+	 * @return JMenu
 	 */
 	public JMenu createMenu() {
 		JMenu stamper = new JMenu("Stamper");
