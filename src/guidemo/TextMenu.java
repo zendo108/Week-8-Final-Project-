@@ -16,6 +16,8 @@ public class TextMenu extends JMenu {
 	private JCheckBoxMenuItem bold;   // controls whether the text is bold or not.
 	private JCheckBoxMenuItem italic; // controls whether the text is italic or not.
 	
+	private JRadioButtonMenuItem justify; // justify text Ivan
+	
 	/**
 	 * Constructor creates all the menu commands and adds them to the menu.
 	 * @param owner the panel whose text will be controlled by this menu.
@@ -34,6 +36,28 @@ public class TextMenu extends JMenu {
 				}
 			}
 		});
+		
+		// menu line height
+		final JMenuItem lineHeight = new JMenuItem("Set Line Spacing");
+		lineHeight.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				double currentHeight = panel.getTextItem().getLineHeightMultiplier();
+				String s = JOptionPane.showInputDialog(panel, "Multiply the default line spacing by what amount?",currentHeight);
+				if (s != null && s.trim().length() > 0) {
+					try {
+						double newHeight = Double.parseDouble(s.trim()); // can throw NumberFormatException
+						panel.getTextItem().setLineHeightMultiplier(newHeight); // can throw IllegalArgumentException
+						panel.repaint();
+					}
+					catch (Exception e) {
+						JOptionPane.showMessageDialog(panel, s + " is not a legal line height.\n"
+								+"Please enter a positive number.");
+					}
+				}
+			}
+		});
+		
+		
 		final JMenuItem size = new JMenuItem("Set Size...");
 		size.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -80,10 +104,12 @@ public class TextMenu extends JMenu {
 		add(change);
 		addSeparator();
 		add(size);
+		add(lineHeight);//add line height Ivan
 		add(color);
 		add(italic);
 		add(bold);
 		addSeparator();
+		add(makeJustifySubMenu());//add justify Ivan
 		add(makeFontNameSubmenu());
 	}
 	
@@ -97,8 +123,53 @@ public class TextMenu extends JMenu {
 	public void setDefaults() {
 		italic.setSelected(false);
 		bold.setSelected(false);
+		//set justify to true Ivan
+		justify.setSelected(true);
+		
 	}
 	
+	/**
+	 * Radio button group for justification
+	 * @return Jmenu created
+	 */
+	private JMenu makeJustifySubMenu() {
+		JMenu menu = new JMenu("Justify");
+		ActionListener setJustifyAction = new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				if ( evt.getActionCommand() == "Left" )
+					panel.getTextItem().setJustify(TextItem.LEFT);
+				else if ( evt.getActionCommand() == "Center")
+					panel.getTextItem().setJustify(TextItem.CENTER);
+				else
+					panel.getTextItem().setJustify(TextItem.RIGHT);
+				panel.repaint();
+			}
+		};
+	
+		ButtonGroup group = new ButtonGroup();  
+		
+		JRadioButtonMenuItem leftMenuItem = new JRadioButtonMenuItem("Left");  
+		leftMenuItem.addActionListener(setJustifyAction);
+		leftMenuItem.setSelected(true);
+		this.justify = leftMenuItem;
+		
+		JRadioButtonMenuItem centerMenuItem = new JRadioButtonMenuItem("Center");
+		centerMenuItem.addActionListener(setJustifyAction);
+		
+		JRadioButtonMenuItem rightMenuItem = new JRadioButtonMenuItem("Right");
+		rightMenuItem.addActionListener(setJustifyAction);
+		
+		group.add(leftMenuItem);
+		group.add(centerMenuItem);
+		group.add(rightMenuItem);
+		
+		menu.add(leftMenuItem);
+		menu.add(centerMenuItem);
+		menu.add(rightMenuItem);
+		
+		return menu;
+		
+	}
 	/**
 	 * Create a menu containing a list of all available fonts.
 	 * (It turns out this can be very messy, at least on Linux, but

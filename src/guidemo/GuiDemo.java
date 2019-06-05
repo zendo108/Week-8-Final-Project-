@@ -58,6 +58,9 @@ public class GuiDemo extends JFrame{
 		IconSupport iconSupport = new IconSupport(drawPanel);
 		content.add( iconSupport.createToolbar(true), BorderLayout.SOUTH );
 		
+		// Add Toolbar BorderLayout.NORTH Ivan
+		content.add( makeBackgroundToolBar(), BorderLayout.NORTH );
+		
 		// Create the menu bar and add it to the frame.  The TextMenu is defined by
 		// a separate class.  The other menus are created in this class.
 		
@@ -66,6 +69,8 @@ public class GuiDemo extends JFrame{
 		textMenu = new TextMenu(drawPanel);
 		menuBar.add(textMenu );
 		menuBar.add( makeBackgroundMenu() );
+		//add to meanubar Ivan
+		menuBar.add( iconSupport.createMenu() );
 		setJMenuBar(menuBar);
 		
 		// Set the size of the window and its position.
@@ -100,6 +105,26 @@ public class GuiDemo extends JFrame{
 		menu.addSeparator();
 		menu.add(quitAction);
 		return menu;
+	}
+	
+	//create tool bar Ivan
+	private JToolBar makeBackgroundToolBar() {
+		JToolBar tbar = new JToolBar("Background");
+		JButton newPict = tbar.add(newPictureAction);
+		newPict.setToolTipText("Clear Image, return to default");
+		JButton saveImg = tbar.add(saveImageAction);
+		saveImg.setToolTipText("Save Image");
+		tbar.addSeparator(new Dimension(15,0));
+		tbar.add(new ChooseBackgroundAction("Mandelbrot"));
+		tbar.add(new ChooseBackgroundAction("Earthrise"));
+		tbar.add(new ChooseBackgroundAction("Sunset"));
+		tbar.add(new ChooseBackgroundAction("Cloud"));
+		tbar.add(new ChooseBackgroundAction("Eagle_nebula"));
+		tbar.addSeparator(new Dimension(15,0));
+		tbar.add(new ChooseBackgroundAction("Custom..."));
+		tbar.add(new ChooseBackgroundAction("Color..."));
+		
+		return tbar;
 	}
 	
 	/**
@@ -190,13 +215,27 @@ public class GuiDemo extends JFrame{
     			putValue(Action.SMALL_ICON, 
     					Util.iconFromResource("resources/images/" + text.toLowerCase() + "_thumbnail.jpeg"));
     		}
-    		if (text.equals("Color..."))
+    		if (text.equals("Color...")) {
     			putValue(Action.SHORT_DESCRIPTION, "<html>Use a solid color for background<br>instead of an image.</html>");
-    		else if (text.equals("Custom..."))
+    			BufferedImage colorSel = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
+    			Graphics g = colorSel.createGraphics();
+    			g.setColor(Color.RED);
+    			g.fillRect(0,0,10,32);
+    			g.setColor(Color.GREEN);
+    			g.fillRect(11,0,11,32);
+    			g.setColor(Color.BLUE);
+    			g.fillRect(22, 0, 10, 32);
+    			g.dispose();
+    			putValue(Action.SMALL_ICON, new ImageIcon(colorSel));
+    		}
+    		else if (text.equals("Custom...")) {
+    			putValue(Action.SMALL_ICON,
+    					Util.iconFromResource("resources/action_icons/fileopen.png"));
     			putValue(Action.SHORT_DESCRIPTION, "<html>Select an image file<br>to use as the background.</html>");
-    		else
+    		}
+    		else {
     			putValue(Action.SHORT_DESCRIPTION, "Use this image as the background.");
-    			
+    		}
     	}
 		public void actionPerformed(ActionEvent evt) {
 			if (text.equals("Custom...")) {

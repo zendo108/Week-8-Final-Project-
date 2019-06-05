@@ -36,6 +36,20 @@ public class IconSupport {
 	}
 	
 	/**
+	 * Return the stamper menu, with images to add Ivan .
+	 * @return JMenu to be added
+	 */
+	public JMenu createMenu() {
+		JMenu stamper = new JMenu("Stamper");
+		for (int i = 0; i < actions.size() - 1; i++) {
+			stamper.add(actions.get(i));
+		}
+		stamper.addSeparator();
+		stamper.add(actions.get(actions.size()-1));		
+		return stamper;
+	}
+	
+	/**
 	 * Return a toolbar containing buttons representing the images that can be added
 	 * to the DrawPanel.
 	 * @param horizontal  a value of JToolBar.HORIZONTAL or JToolBar.VERTICAL tells
